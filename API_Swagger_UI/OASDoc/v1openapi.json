@@ -1,0 +1,229 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "This API is used to provide the details in the order",
+    "version": "1.0.0",
+    "title": "Shopping Order"
+  },
+  "tags": [
+    {
+      "name": "orders",
+      "description": "Return the order details, the endpoints in order can also return a single order, all orders or items in the order."
+    }
+  ],
+  "paths": {
+    "/orders/{orderid}": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get the order details",
+        "description": "Return the details of a specific order by the order id",
+        "operationId": "getorder",
+        "parameters": [
+          {
+            "name": "orderid",
+            "in": "path",
+            "description": "order id of the order",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/order"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/order"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Session Value"
+          },
+          "500": {
+            "description": "In case of any application exception"
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get all the order details",
+        "description": "Return all the order and its details",
+        "operationId": "getorders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK - Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/order"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/order"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Session Value"
+          },
+          "500": {
+            "description": "In case of any application exception"
+          }
+        }
+      }
+    },
+    "/orders/{orderid}/items": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get all the order details",
+        "description": "Return all the order and its details",
+        "operationId": "getitemsinorder",
+        "parameters": [
+          {
+            "name": "orderid",
+            "in": "path",
+            "description": "order id of the order",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK - Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/item"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/item"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Session Value"
+          },
+          "500": {
+            "description": "In case of any application exception"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "item": {
+        "type": "object",
+        "description": "Details of item in the order",
+        "properties": {
+          "UPC": {
+            "type": "string",
+            "format": "string",
+            "description": "Unique Product Code of the item",
+            "example": 134567
+          },
+          "Description": {
+            "type": "string",
+            "format": "string",
+            "description": "Item description",
+            "example": "FRENCH FRIES"
+          },
+          "Price": {
+            "type": "number",
+            "format": "decimal",
+            "description": "Price of the item",
+            "example": "1.00"
+          }
+        }
+      },
+      "order": {
+        "type": "object",
+        "description": "Details of the shop and scan order",
+        "properties": {
+          "orderid": {
+            "type": "string",
+            "format": "string",
+            "description": "Order id of the order",
+            "example": "WE10543576"
+          },
+          "items": {
+            "type": "array",
+            "description": "List of items in the transaction",
+            "example": [
+              {
+                "UPC": 907656,
+                "Description": "Peanut Butter",
+                "Price": "1.50"
+              },
+              {
+                "UPC": "013120002916",
+                "Description": "Luxor Pen",
+                "Price": "3.25"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/item"
+            }
+          }
+        }
+      }
+    }
+  }
+}
